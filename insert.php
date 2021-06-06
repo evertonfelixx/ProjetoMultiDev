@@ -42,11 +42,27 @@ if (mysqli_query($conn, $sql)) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
-    <title>Olá, mundo!</title>
+    <title>Video</title>
   </head>
   <body>
     <div class="container">
-		
+		<div class="row">
+			<ul class="nav nav-pills">
+			  <li class="nav-item">
+				<a class="nav-link" href="home.php">Página inicial</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link " href="select.php">Movimentos</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link active" href="insert.php">Cadastrar Receita</a>
+			  </li>	
+			  <li class="nav-item">
+				<a class="nav-link" href="cadastrarDespesa.php">Cadastrar Despesa</a>
+			  </li>
+
+			</ul>
+		</div>	
 		<?php
 		if(isset($msg)){
 		?>

@@ -28,70 +28,66 @@ if (!$conn) {
 		<div class="row">
 			<ul class="nav nav-pills">
 			  <li class="nav-item">
-				<a class="nav-link" href="home.php">Página inicial</a>
+				<a class="nav-link active" href="home.php">Página inicial</a>
 			  </li>
 			  <li class="nav-item">
-				<a class="nav-link active" href="select.php">Movimentos</a>
+				<a class="nav-link " href="select.php">Movimentos</a>
 			  </li>
 			  <li class="nav-item">
 				<a class="nav-link" href="insert.php">Cadastrar Receita</a>
 			  </li>	
 			  <li class="nav-item">
-				<a class="nav-link" href="cadastrarDespesa.php">Cadastrar Despesa</a>
+				<a class="nav-link" href="cadastrarDespesa">Cadastrar Despesa</a>
 			  </li>
 
 			</ul>
 		</div>
 		<div class="row">
-			<div class="col">
-				<table class="table table-hover">
-				  <thead>
-					<tr>
-					  <th scope="col">#</th>
-					  <th scope="col">Descrição</th>
-					  <th scope="col">Data</th>
-					  <th scope="col">Valor</th>
-					  <th scope="col">Tipo</th>
-					</tr>
-				  </thead>
-				  <tbody>
-				  <?php
-					$sql = "SELECT movimentos.*, catreceitas.DescReceita as receita, catdespesas.DescDespesa as despesa 
-					FROM movimentos LEFT JOIN catreceitas ON movimentos.CatReceitas_CodReceita = catreceitas.CodReceita
-					LEFT JOIN catdespesas ON movimentos.CatDespesas_CodDespesa = catdespesas.CodDespesa";
-					$result = mysqli_query($conn, $sql);
-
-					if (mysqli_num_rows($result) > 0) {
-					  // output data of each row
-					  while($row = mysqli_fetch_assoc($result)) {
-						  ?>
-						<tr>
-						  <th scope="row"><?php echo $row["CodMovimento"];?></th>
-						  <td><?=$row["DescMovimento"];?></td>
-						  <td><?=$row["DtMovmento"];?></td>
-						  <td><?=$row["Valor"];?></td>
-						  <?php
-						  if($row['receita'] == null)
-							  echo "<td class='text-danger'>".$row['despesa']."</td>";
-						  else
-							  echo "<td class='text-success'>".$row['receita']."</td>";
-
-						  ?>
-						</tr>  
-						<?php
-						//echo "Código: " . $row["CodMovimento"]. " - Descrição: " . $row["DescMovimento"]. " - Valor: " . $row["Valor"]. "<br />"; 
-					  }
-					} else {
-					  echo "0 results";
-					}
-				  ?>
-				  
-					
-					
-				  </tbody>
-				</table>	
+			<?php
+			$sql = "SELECT SUM(Valor) FROM `movimentos` WHERE `CatReceitas_CodReceita` is NOT null";
+			$result = mysqli_query($conn, $sql);
+			$receitas = mysqli_fetch_array($result);
+			$receita = $receitas[0];
+			?>
+			
+			<div class="alert alert-success" role="alert">
+				Receitas: R$ <?=$receita; ?>
 			</div>
+		
 		</div>
+		<div class="row">
+			<?php
+			$sql = "SELECT SUM(Valor) FROM `movimentos` WHERE `CatDespesas_CodDespesa` is NOT null";
+			$result = mysqli_query($conn, $sql);
+			$despesas = mysqli_fetch_array($result);
+			$despesa = $despesas[0];
+			?>
+			
+			<div class="alert alert-danger" role="alert">
+				Despesas: R$ <?=$despesa; ?>
+			</div>
+		
+		</div>
+		<div class="row">
+			<?php
+			if($receita>$despesa){
+				$saldo = $receita - $despesa;
+				?>
+				<div class="alert alert-success" role="alert">
+					Saldo: R$ <?=$saldo; ?>
+				</div>
+				<?php
+			}else{
+				$saldo = $receita - $despesa;
+				?>
+				<div class="alert alert-danger" role="alert">
+					Saldo: R$ <?=$saldo; ?>
+				</div>
+				<?php
+			}
+			?>
+		</div>
+		
 	</div>
 	
     <!-- JavaScript (Opcional) -->
